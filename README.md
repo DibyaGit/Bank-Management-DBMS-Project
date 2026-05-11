@@ -33,12 +33,12 @@ The database is designed to seamlessly handle the fundamental workflows of a mod
 
 ```mermaid
 graph TD
-    A[🧑 Customer] -->|Opens| B(💳 Account)
-    B -->|Initiates| C{💰 Transaction}
-    C -->|Deposit / Withdraw| D[Update Local Balance]
-    C -->|Fund Transfer| E[Update Source & Target]
-    D -.->|Triggers Event| F[(🛡️ Audit Log)]
-    E -.->|Triggers Event| F
+    A["Customer"] -->|"Opens"| B("Account")
+    B -->|"Initiates"| C{"Transaction"}
+    C -->|"Deposit / Withdraw"| D["Update Local Balance"]
+    C -->|"Fund Transfer"| E["Update Source & Target"]
+    D -.->|"Triggers Event"| F[("Audit Log")]
+    E -.->|"Triggers Event"| F
     
     style A fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
     style B fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
