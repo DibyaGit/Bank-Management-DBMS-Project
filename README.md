@@ -1,91 +1,68 @@
-# P2 Bank Management System
+# 🏦 Enterprise Bank Management System
 
-## Domain Description
-This database management system models the core operations of a commercial banking institution. It is designed to manage customers, their various accounts (Savings and Current), and all associated financial transactions including deposits, withdrawals, and inter-account fund transfers. The system ensures rigorous data integrity, automates the recording of audit trails for sensitive operations, and implements strict transaction controls to prevent inconsistent financial states.
+## 📊 Executive Summary
+The **Enterprise Bank Management System** is a robust, highly-normalized relational database architecture designed to simulate the core operations of a commercial banking institution. Built using **Microsoft SQL Server (T-SQL)**, this system securely manages customer portfolios, financial accounts (Savings and Current), and multi-directional monetary transactions. The architecture prioritizes data integrity, ACID-compliant fund transfers, and automated audit logging to meet enterprise-level security and reporting standards.
 
-## Database Design Approach
-The database was modeled using Entity-Relationship principles and rigorously normalized up to the Third Normal Form (3NF) and Boyce-Codd Normal Form (BCNF). 
-The core entities are:
-- **Customers**: Contains demographic and contact information.
-- **Accounts**: Tied to a customer (1-M relationship), tracking balance and status.
-- **Transactions**: Tied to an account (1-M relationship), tracking all monetary movements.
-- **AuditLogs**: Automatically populated via system triggers to track data modifications.
+## 🗄️ Database Architecture & Design
 
-This schema guarantees that there are no partial or transitive dependencies, effectively eliminating update, insertion, and deletion anomalies.
+The database was meticulously modeled using Entity-Relationship principles and rigorously normalized up to **Third Normal Form (3NF) / Boyce-Codd Normal Form (BCNF)**. This eradicates partial and transitive dependencies, ensuring zero update, insertion, or deletion anomalies.
 
-## Features Implemented
-- **Data Definition & Integrity (DDL)**: Comprehensive table structures with Primary Keys, Foreign Keys, `NOT NULL`, `CHECK` (preventing negative balances), and `UNIQUE` constraints.
-- **Data Manipulation (DML)**: robust dummy data population alongside sample `UPDATE` and `DELETE` operations.
-- **Complex Querying**: Over 10 advanced queries leveraging `INNER`, `LEFT`, `RIGHT`, and `FULL OUTER` joins, subqueries, and aggregate functions (`GROUP BY`, `HAVING`) for advanced reporting.
-- **Views & Indexes**: Simple, join-based, and aggregate views abstracting complex queries, optimized by clustered and non-clustered indexes.
-- **Advanced Programmability**: 
-  - **Scalar & Table-Valued Functions**: Encapsulating reusable business logic (e.g., calculating total customer balances, retrieving transaction history).
-  - **Triggers**: `AFTER INSERT`, `UPDATE`, and `DELETE` triggers automating the population of the `AuditLogs` table for enhanced security.
-- **Transaction Control Language (TCL)**: Secure fund transfer simulations using `BEGIN TRAN`, `COMMIT`, and `ROLLBACK` within a `TRY...CATCH` block to ensure ACID compliance.
-- **Data Control Language (DCL)**: Simulated role-based access control using `GRANT` and `REVOKE` for Bank Tellers and Database Administrators.
+### Entity-Relationship Diagram (ERD)
+The following schema visualizes the core 1-to-Many relationships dictating the flow of data from customers to their accounts and subsequent transactions.
 
-## Execution Steps
-To execute this project locally in SQL Server Management Studio (SSMS) or Azure Data Studio:
+![Database Schema](ERD/er_diagram.png)
 
-1. **Setup the Schema**:
-   Open and execute `SQL/ddl_scripts.sql`. This will create the `BankManagementDB` database, all tables, and their constraints.
-   
-2. **Populate Data**:
-   Open and execute `SQL/dml_scripts.sql` to insert dummy data and test basic DML operations.
+## ⚙️ Core Technical Features
 
-3. **Deploy Views and Indexes**:
-   Open and execute `SQL/views.sql` to compile the views and apply performance indexes.
+This project emphasizes advanced SQL programmability and security features necessary for a production-grade financial system.
 
-4. **Deploy Advanced Logic**:
-   Open and execute `SQL/functions.sql` and `SQL/triggers.sql` to instantiate the programmable objects into the database schema.
+- **Data Integrity & Constraints (DDL):**
+  Enforces business rules natively using `PRIMARY KEY`, `FOREIGN KEY` (with cascade deletions), `UNIQUE`, and `CHECK` constraints (e.g., preventing negative balances).
+- **Advanced Programmability:**
+  - **Triggers:** `AFTER INSERT`, `UPDATE`, and `DELETE` triggers are bound to critical tables, automatically capturing state changes and populating the `AuditLogs` table to maintain a comprehensive security trail.
+  - **Functions:** Implements both Scalar and Table-Valued Functions (TVFs) to encapsulate reusable business logic, such as dynamically calculating total customer liquidity.
+- **Transaction Control Language (TCL):**
+  Guarantees ACID compliance during complex operations. Fund transfers are enclosed in `BEGIN TRAN`, `COMMIT`, and `ROLLBACK` blocks within `TRY...CATCH` structures, preventing partial financial updates.
+- **Data Control Language (DCL):**
+  Simulates a real-world enterprise environment through role-based access control. Defines `BankTellerRole` and `DBAdminRole` using granular `GRANT`, `DENY`, and `REVOKE` permissions.
+- **Complex Analytical Querying:**
+  Features a suite of 10+ advanced reports utilizing `INNER`, `LEFT`, `RIGHT`, and `FULL OUTER` joins, correlated subqueries, derived tables, and aggregate functions (`GROUP BY`, `HAVING`). 
+- **Performance Optimization:**
+  Abstracts complex reporting logic through simple, join-based, and aggregate **Views**, supported by strategic clustered and non-clustered **Indexes** to accelerate query execution.
 
-5. **Test Querying & Transactions**:
-   - Run the complex reports found in `SQL/queries.sql`.
-   - Run the fund transfer simulation found in `SQL/transaction_control.sql` to witness the TCL logic and audit triggers in action.
-   - Run `SQL/access_control.sql` to test the DCL permission mechanics.
+## 📂 Repository Structure
 
-## Sample Queries and Outputs
+The project is organized to ensure modularity and ease of execution.
 
-**Query:** Total balance per customer across active accounts
-```sql
-SELECT 
-    c.CustomerID,
-    c.FirstName,
-    c.LastName,
-    SUM(a.Balance) AS TotalBalance
-FROM 
-    Customers c
-INNER JOIN 
-    Accounts a ON c.CustomerID = a.CustomerID
-WHERE 
-    a.Status = 'Active'
-GROUP BY 
-    c.CustomerID, c.FirstName, c.LastName
-ORDER BY 
-    TotalBalance DESC;
+```text
+Bank-Management-DBMS-Project/
+├── Documentation/
+│   └── normalization_report.pdf    # Detailed 1NF to 3NF/BCNF normalization process
+├── ERD/
+│   └── er_diagram.png              # Rendered Database Schema Diagram
+├── Output/
+│   └── sample_results.csv          # Exported outputs of complex queries
+├── SQL/
+│   ├── ddl_scripts.sql             # Table creation and constraint definitions
+│   ├── dml_scripts.sql             # Dummy data insertion and sample DML
+│   ├── queries.sql                 # Complex analytical queries and reporting
+│   ├── views.sql                   # View and Index configurations
+│   ├── functions.sql               # Scalar and Table-Valued Functions
+│   ├── triggers.sql                # Automated Audit Logging Triggers
+│   ├── transaction_control.sql     # ACID-compliant fund transfer simulation
+│   └── access_control.sql          # Role-based access DCL commands
+└── README.md                       # Enterprise project documentation
 ```
-**Sample Output:**
-| CustomerID | FirstName | LastName | TotalBalance |
-|------------|-----------|----------|--------------|
-| 2          | Bob       | Johnson  | 15000.00     |
-| 1          | Alice     | Smith    | 6200.50      |
-| 3          | Charlie   | Williams | 3400.00      |
-| 4          | Diana     | Brown    | 250.00       |
 
-**Query:** Finding the maximum single transaction per account
-```sql
-SELECT 
-    a.AccountID,
-    a.AccountType,
-    (SELECT MAX(Amount) FROM Transactions t WHERE t.AccountID = a.AccountID) AS MaxTransactionAmount
-FROM 
-    Accounts a
-WHERE 
-    a.Status = 'Active';
-```
-**Sample Output:**
-| AccountID | AccountType | MaxTransactionAmount |
-|-----------|-------------|----------------------|
-| 1000      | Savings     | 2000.00              |
-| 1001      | Current     | 500.00               |
-| 1002      | Savings     | 5000.00              |
+## 🚀 Execution Guide
+
+To deploy this database locally using SQL Server Management Studio (SSMS) or Azure Data Studio, execute the scripts in the following order:
+
+1. **`SQL/ddl_scripts.sql`**: Initializes the database, tables, and constraints.
+2. **`SQL/dml_scripts.sql`**: Populates the tables with foundational dummy data.
+3. **`SQL/views.sql`**: Compiles views and performance indexes.
+4. **`SQL/functions.sql` & `SQL/triggers.sql`**: Instantiates advanced programmable objects.
+5. **Test Scenarios**:
+   - Run `SQL/queries.sql` to view analytical reports.
+   - Run `SQL/transaction_control.sql` to simulate an atomic fund transfer.
+   - Inspect the `AuditLogs` table to view the automated trails generated by the triggers.
