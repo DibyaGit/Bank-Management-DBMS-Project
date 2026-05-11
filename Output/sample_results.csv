@@ -1,5 +1,50 @@
-Query Name,Execution Status,Notes
-vw_BankLiquiditySummary,PENDING,Export your results from SSMS and paste them here
-vw_CustomerAccountDetails,PENDING,Export your results from SSMS and paste them here
-Complex Query 1 (Total Balance),PENDING,Export your results from SSMS and paste them here
-Complex Query 5 (Above Average),PENDING,Export your results from SSMS and paste them here
+CustomerID	FirstName	LastName	TotalBalance
+2	Bob	Johnson	15000.00
+1	Alice	Smith	6200.50
+3	Charlie	Williams	3400.00
+4	Diana	Brown	250.00
+
+CustomerID	FirstName	LastName	AccountID	AccountType	Balance
+1	Alice	Smith	1000	Savings	5000.00
+1	Alice	Smith	1001	Current	1200.50
+2	Bob	Johnson	1002	Savings	15000.00
+3	Charlie	Williams	1003	Current	3400.00
+4	Diana	Brown	1004	Savings	250.00
+5	Evan	Davis	NULL	NULL	0.00
+
+AccountID	AccountType	TransactionID	TransactionType	Amount	TransactionDate
+1000	Savings	1	Deposit	2000.00	2026-05-01 22:50:05.440
+1001	Current	2	Withdrawal	500.00	2026-05-03 22:50:05.440
+1002	Savings	3	Deposit	5000.00	2026-05-06 22:50:05.440
+1000	Savings	4	Transfer	1000.00	2026-05-09 22:50:05.440
+1003	Current	5	Deposit	1000.00	2026-05-09 22:50:05.440
+
+FirstName	LastName	AccountID	Status
+Alice	Smith	1000	Active
+Alice	Smith	1001	Active
+Bob	Johnson	1002	Active
+Charlie	Williams	1003	Active
+Diana	Brown	1004	Active
+Evan	Davis	NULL	NULL
+
+CustomerID	AccountID	Balance
+1	1000	5000.00
+2	1002	15000.00
+
+AccountType	TotalLiquidity	TotalAccounts
+Savings	20250.00	3
+
+FirstName	LastName	TotalTransactions
+Bob	Johnson	1
+Alice	Smith	3
+Charlie	Williams	1
+
+FirstName	LastName	AccountType	TransactionType	Amount	TransactionDate
+Alice	Smith	Savings	Transfer	1000.00	2026-05-09 22:50:05.440
+Charlie	Williams	Current	Deposit	1000.00	2026-05-09 22:50:05.440
+Bob	Johnson	Savings	Deposit	5000.00	2026-05-06 22:50:05.440
+Alice	Smith	Current	Withdrawal	500.00	2026-05-03 22:50:05.440
+Alice	Smith	Savings	Deposit	2000.00	2026-05-01 22:50:05.440
+
+CustomerID	FirstName	LastName	TotalDeposited
+2	Bob	Johnson	5000.00
