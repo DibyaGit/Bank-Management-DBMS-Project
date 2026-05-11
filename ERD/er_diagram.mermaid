@@ -1,0 +1,46 @@
+erDiagram
+    %% Entities
+    CUSTOMERS {
+        int CustomerID PK "Identity(1,1)"
+        string FirstName "NOT NULL"
+        string LastName "NOT NULL"
+        string Email "UNIQUE, NOT NULL"
+        string Phone "UNIQUE, NOT NULL"
+        string AddressLine
+        string City
+        string State
+        string ZipCode
+    }
+
+    ACCOUNTS {
+        int AccountID PK "Identity(1000,1)"
+        int CustomerID FK "NOT NULL"
+        string AccountType "CHECK(Savings, Current)"
+        decimal Balance "CHECK(>= 0)"
+        string Status "CHECK(Active, Closed)"
+        datetime OpenedDate "DEFAULT GETDATE()"
+    }
+
+    TRANSACTIONS {
+        int TransactionID PK "Identity(1,1)"
+        int AccountID FK "NOT NULL"
+        string TransactionType "CHECK(Deposit, Withdrawal, Transfer)"
+        decimal Amount "CHECK(> 0)"
+        datetime TransactionDate "DEFAULT GETDATE()"
+        int ReferenceAccountID "NULLable (For Transfers)"
+    }
+
+    AUDIT_LOGS {
+        int LogID PK "Identity(1,1)"
+        string ActionType "INSERT/UPDATE/DELETE"
+        string TableName 
+        int RecordID 
+        decimal OldBalance "NULLable"
+        decimal NewBalance "NULLable"
+        datetime ActionDate "DEFAULT GETDATE()"
+    }
+
+    %% Relationships
+    CUSTOMERS ||--o{ ACCOUNTS : "has"
+    ACCOUNTS ||--o{ TRANSACTIONS : "performs"
+    ACCOUNTS ||--o{ TRANSACTIONS : "receives (via ReferenceAccountID)"
